@@ -106,7 +106,8 @@ const SearchBar = ({ onAddToFavorites }) => {
         <ul>
           {selectedCity && (
             <div>
-              {weatherData?.list.map((weatherDataItem) => (
+              {/* {weatherData?.list.map((weatherDataItem) => ( */}
+              {weatherData?.list.slice(0, 1).map((weatherDataItem) => (
                 <WeatherCard key={nanoid()} weatherData={weatherDataItem} />
               ))}
             </div>

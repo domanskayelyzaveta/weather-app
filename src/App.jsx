@@ -1,13 +1,16 @@
 import React, { useState } from "react";
 import WeatherList from "./components/Weather/WeatherList";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addToFavorites } from "./components/redux/slice";
 import SearchBar from "./components/SearchBar/SearchBar";
 import FavoritesList from "./components/Weather/Favorites";
 import WeatherCard from "./components/Weather/WeatherCard";
+import Chart from "./components/Chart/Chart";
+import { selectFavorites } from "./components/redux/selectors";
 
 const App = () => {
   const [cities, setCities] = useState([]);
+  const favorites = useSelector(selectFavorites);
 
   const dispatch = useDispatch();
 
@@ -44,8 +47,8 @@ const App = () => {
       <h1>Погода</h1>
       <SearchBar cities={cities} />
       <WeatherCard />
-      <WeatherList cities={cities} />
-      <FavoritesList />
+      {/* <WeatherList cities={cities} /> */}
+      {favorites.length > 0 && <WeatherList cities={cities} />}
     </div>
   );
 };

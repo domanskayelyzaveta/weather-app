@@ -1,8 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getWeatherThunk } from "./thunksAPI";
+import { getDailyWeatherThunk, getWeatherThunk } from "./thunksAPI";
 
 const initialState = {
   weather: [],
+  dailyWeather: {},
   favorites: [],
 };
 
@@ -35,6 +36,19 @@ const weatherSlice = createSlice({
         state.isLoading = false;
         state.error = action.payload;
       });
+    // .addCase(getDailyWeatherThunk.pending, (state) => {
+    //   state.isLoading = true;
+    //   state.error = null;
+    // })
+    // .addCase(getDailyWeatherThunk.fulfilled, (state, action) => {
+    //   state.isLoading = false;
+    //   state.dailyWeather = action.payload;
+    //   state.error = null;
+    // })
+    // .addCase(getDailyWeatherThunk.rejected, (state, action) => {
+    //   state.isLoading = false;
+    //   state.error = action.payload;
+    // });
   },
 });
 
