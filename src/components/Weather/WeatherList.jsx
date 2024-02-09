@@ -3,7 +3,12 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { selectFavorites } from "../redux/selectors";
 import sprite from "../../images/sprite.svg";
-import { ListWrapper, SvgCross, WrapperSvg } from "./WeatherList.styles";
+import {
+  ListWrapper,
+  StyledSvgDiv,
+  SvgCross,
+  WrapperSvg,
+} from "./WeatherList.styles";
 import { removeFromFavorites } from "../redux/slice";
 import { nanoid } from "nanoid";
 import {
@@ -20,38 +25,11 @@ import {
   WeatherCardWrapper,
 } from "./WeatherCard.styled";
 import moment from "moment";
-
-// const WeatherList = ({ weatherData }) => {
-//   const favoriteWeather = useSelector(selectFavorites);
-//   console.log("FFFFFF", favoriteWeather);
-
-//   if (
-//     !weatherData ||
-//     !weatherData.main ||
-//     !weatherData.weather ||
-//     !weatherData.wind
-//   ) {
-//     return <div>No weather data available</div>;
-//   }
-
-//   return (
-//     <div>
-//       <h3>Name:{favoriteWeather[0].city.name}</h3>
-//       <p>Temperature: {weatherData.main.temp} °C</p>
-//       <p>Feels like: {weatherData.main.feels_like} °C</p>
-//       <p>Humidity: {weatherData.main.humidity}%</p>
-//       <p>Weather: {weatherData.weather[0].description}</p>
-//       <p>
-//         Wind Speed: {weatherData.wind.speed} m/s, Direction:{" "}
-//         {weatherData.wind.deg}°
-//       </p>
-//     </div>
-//   );
-// };
-
-// export default WeatherList;
+import { useTranslation } from "react-i18next";
 
 const WeatherList = ({ weatherData }) => {
+  const { t } = useTranslation();
+
   const favoriteWeather = useSelector(selectFavorites);
   console.log("FFFFFF", favoriteWeather);
   const dispatch = useDispatch();
@@ -63,7 +41,7 @@ const WeatherList = ({ weatherData }) => {
   const weatherStatus = favoriteWeather[0].list[0].weather[0].main;
 
   const sunnyWeatherStatus =
-    weatherStatus === "Clear" ? "Sunny" : weatherStatus;
+    weatherStatus === "Clear" ? t("Sunny") : t(weatherStatus);
 
   const formatDate = (dateString) => {
     const date = moment(dateString);
@@ -122,11 +100,13 @@ const WeatherList = ({ weatherData }) => {
     <div>
       {favoriteWeather.map((favorite, index) => (
         <WeatherCardWrapper key={index}>
-          <StyledTitleWrapper>
-            <TitleH2>{favorite.city.name}</TitleH2>
+          <StyledSvgDiv>
             <SvgCross onClick={() => handleRemoveItem(index)}>
               <use href={`${sprite}#icon-cross`}></use>
             </SvgCross>
+          </StyledSvgDiv>
+          <StyledTitleWrapper>
+            <TitleH2>{favorite.city.name}</TitleH2>
             <StyledImgSunDiv>
               <Img src={iconUrl} alt="sun" />
               <ParagraphSun>{sunnyWeatherStatus}</ParagraphSun>
@@ -142,7 +122,7 @@ const WeatherList = ({ weatherData }) => {
                 {Math.round(convertTemperature(favorite.list[0].main.temp))}
               </StyledTemperature>
               <p>
-                Feels like:
+                {t("feels_like")}:
                 {Math.round(
                   convertTemperature(favorite.list[0].main.feels_like)
                 )}
@@ -167,14 +147,14 @@ const WeatherList = ({ weatherData }) => {
 
             <div>
               <p>
-                Wind: {favorite.list[0].wind.speed} <span>m/s</span>
+                {t("wind")}: {favorite.list[0].wind.speed} <span>m/s</span>
               </p>
               <p>
-                Humidity: {favorite.list[0].main.humidity}
+                {t("humidity")}: {favorite.list[0].main.humidity}
                 <span>%</span>
               </p>
               <p>
-                Humidity: {favorite.list[0].main.pressure}
+                {t("pressure")}: {favorite.list[0].main.pressure}
                 <span>Pa</span>
               </p>
             </div>

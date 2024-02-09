@@ -15,3 +15,8 @@ export const SvgCross = styled.svg`
   width: 8px;
   height: 8px;
 `;
+
+export const StyledSvgDiv = styled.div`
+  display: flex;
+  justify-content: flex-end;
+`;
