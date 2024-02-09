@@ -33,9 +33,7 @@ const App = () => {
 
   return (
     <I18nextProvider i18n={i18n}>
-      <div className="app">
-        <h1>Погода</h1>
-
+      <div className="container">
         <Header />
         <SearchBar cities={cities} />
         <WeatherCard />

@@ -17,10 +17,13 @@ import {
 import moment from "moment";
 import Chart from "../Chart/Chart";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 const WeatherCard = ({ weatherData }) => {
-  console.log("CARD:", weatherData);
+  const { t } = useTranslation();
+
   const weather = useSelector(selectWeather);
+  console.log("CADR:", weather.list);
 
   const [unit, setUnit] = useState("celsius");
 
@@ -41,7 +44,7 @@ const WeatherCard = ({ weatherData }) => {
   }
 
   const sunnyWeatherStatus =
-    weatherStatus === "Clear" ? "Sunny" : weatherStatus;
+    weatherStatus === "Clear" ? t("Sunny") : t(weatherStatus);
 
   const formatDate = (dateString) => {
     const date = moment(dateString);
@@ -76,7 +79,7 @@ const WeatherCard = ({ weatherData }) => {
       <DateParagraph>{formattedDate}</DateParagraph>
 
       <StyledChartDiv>
-        <Chart />
+        <Chart data={weather.list} />
       </StyledChartDiv>
 
       <StyledWeatherInfoDiv>
@@ -85,7 +88,7 @@ const WeatherCard = ({ weatherData }) => {
             {Math.round(convertTemperature(weatherData.main.temp))}
           </StyledTemperature>
           <p>
-            Feels like:
+            {t("feels_like")}:
             {Math.round(convertTemperature(weatherData.main.feels_like))}
             {unit === "celsius" ? "C°" : "F°"}
           </p>
@@ -108,14 +111,14 @@ const WeatherCard = ({ weatherData }) => {
 
         <div>
           <p>
-            Wind: {weatherData.wind.speed} <span>m/s</span>
+            {t("wind")}: {weatherData.wind.speed} <span>m/s</span>
           </p>
           <p>
-            Humidity: {weatherData.main.humidity}
+            {t("humidity")}: {weatherData.main.humidity}
             <span>%</span>
           </p>
           <p>
-            Weather: {weatherData.main.pressure}
+            {t("pressure")}: {weatherData.main.pressure}
             <span>Pa</span>
           </p>
         </div>
