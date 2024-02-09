@@ -3,27 +3,34 @@ import { useSelector } from "react-redux";
 import { selectWeather } from "../redux/selectors";
 import {
   DateParagraph,
+  DegSpan,
+  DegSwitcherDiv,
   Img,
+  MainWeatherInfoP,
+  OrangeSpan,
   ParagraphSun,
   StyledChartDiv,
   StyledDegreeBtn,
+  StyledFeelsPar,
   StyledImgSunDiv,
   StyledTemperature,
   StyledTitleWrapper,
   StyledWeatherInfoDiv,
+  TemperatureDiv,
   TitleH2,
   WeatherCardWrapper,
+  WeatherInfoDiv,
 } from "./WeatherCard.styled";
-import moment from "moment";
+// import moment from "moment";
 import Chart from "../Chart/Chart";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { formatDate, convertTemperature } from "../../helpers";
 
 const WeatherCard = ({ weatherData }) => {
   const { t } = useTranslation();
 
   const weather = useSelector(selectWeather);
-  console.log("CADR:", weather.list);
 
   const [unit, setUnit] = useState("celsius");
 
@@ -46,29 +53,45 @@ const WeatherCard = ({ weatherData }) => {
   const sunnyWeatherStatus =
     weatherStatus === "Clear" ? t("Sunny") : t(weatherStatus);
 
-  const formatDate = (dateString) => {
-    const date = moment(dateString);
-    const formattedDate = date.format("ddd, D MMMM, HH:mm");
+  // const formatDate = (dateString) => {
+  //   const date = moment(dateString);
+  //   const formattedDate = date.format("ddd, D MMMM, HH:mm");
 
-    return formattedDate;
-  };
+  //   return formattedDate;
+  // };
 
   const originalDate = weatherData?.dt_txt;
   const formattedDate = formatDate(originalDate);
 
-  const convertTemperature = (value) => {
-    if (unit === "celsius") {
-      return value;
-    } else {
-      return Math.round((value * 9) / 5 + 32);
-    }
-  };
+  const temperature = convertTemperature(weatherData.main.temp, unit);
+  const feelsLikeTemperature = convertTemperature(
+    weatherData.main.feels_like,
+    unit
+  );
+
+  // const convertTemperature = (value) => {
+  //   if (unit === "celsius") {
+  //     return value;
+  //   } else {
+  //     return Math.round((value * 9) / 5 + 32);
+  //   }
+  // };
+
+  const cardBackgroundColor =
+    Math.round(convertTemperature(weatherData.main.temp)) < 0
+      ? "#F1F2FF"
+      : "#FFFAF1";
+
+  const spanColor =
+    Math.round(convertTemperature(weatherData.main.temp)) < 0
+      ? "#459DE9"
+      : "#FFA25B";
 
   return (
-    <WeatherCardWrapper>
+    <WeatherCardWrapper backgroundColor={cardBackgroundColor}>
       <StyledTitleWrapper>
         <TitleH2>
-          {cityName}, {country}
+          {cityName || weatherData.name}, {country || weatherData.sys.country}
         </TitleH2>
         <StyledImgSunDiv>
           <Img src={iconUrl} alt="sun" />
@@ -83,45 +106,58 @@ const WeatherCard = ({ weatherData }) => {
       </StyledChartDiv>
 
       <StyledWeatherInfoDiv>
-        <div>
+        <TemperatureDiv>
           <StyledTemperature>
-            {Math.round(convertTemperature(weatherData.main.temp))}
+            {Math.round(convertTemperature(temperature, unit)) > 0
+              ? "+" + Math.round(convertTemperature(temperature, unit))
+              : Math.round(convertTemperature(temperature, unit))}
           </StyledTemperature>
-          <p>
-            {t("feels_like")}:
-            {Math.round(convertTemperature(weatherData.main.feels_like))}
-            {unit === "celsius" ? "C°" : "F°"}
-          </p>
-        </div>
 
-        <div>
-          <StyledDegreeBtn
-            onClick={() => setUnit("celsius")}
-            $active={unit === "celsius"}
-          >
-            °C
-          </StyledDegreeBtn>
-          <StyledDegreeBtn
-            onClick={() => setUnit("fahrenheit")}
-            $active={unit === "fahrenheit"}
-          >
-            °F
-          </StyledDegreeBtn>
-        </div>
+          <StyledFeelsPar>
+            {t("feels_like")}:&nbsp;
+            <DegSpan>
+              {Math.round(convertTemperature(feelsLikeTemperature))}
+              &nbsp;
+              {unit === "celsius" ? "°C" : "°F"}
+            </DegSpan>
+          </StyledFeelsPar>
 
-        <div>
-          <p>
-            {t("wind")}: {weatherData.wind.speed} <span>m/s</span>
-          </p>
-          <p>
-            {t("humidity")}: {weatherData.main.humidity}
-            <span>%</span>
-          </p>
-          <p>
-            {t("pressure")}: {weatherData.main.pressure}
-            <span>Pa</span>
-          </p>
-        </div>
+          <DegSwitcherDiv>
+            <StyledDegreeBtn
+              onClick={() => setUnit("celsius")}
+              $active={unit === "celsius"}
+            >
+              °C
+            </StyledDegreeBtn>
+            <StyledDegreeBtn
+              onClick={() => setUnit("fahrenheit")}
+              $active={unit === "fahrenheit"}
+            >
+              °F
+            </StyledDegreeBtn>
+          </DegSwitcherDiv>
+        </TemperatureDiv>
+
+        <WeatherInfoDiv>
+          <MainWeatherInfoP>
+            {t("wind")}: &nbsp;
+            <OrangeSpan color={spanColor}>
+              {weatherData.wind.speed}m/s
+            </OrangeSpan>
+          </MainWeatherInfoP>
+          <MainWeatherInfoP>
+            {t("humidity")}: &nbsp;
+            <OrangeSpan color={spanColor}>
+              {weatherData.main.humidity}%
+            </OrangeSpan>
+          </MainWeatherInfoP>
+          <MainWeatherInfoP>
+            {t("pressure")}: &nbsp;
+            <OrangeSpan color={spanColor}>
+              {weatherData.main.pressure}Pa
+            </OrangeSpan>
+          </MainWeatherInfoP>
+        </WeatherInfoDiv>
       </StyledWeatherInfoDiv>
     </WeatherCardWrapper>
   );

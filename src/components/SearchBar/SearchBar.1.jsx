@@ -15,7 +15,6 @@ export const SearchBar = ({ onAddToFavorites }) => {
   const dispatch = useDispatch();
   const weatherData = useSelector(selectWeather);
   const favorites = useSelector(selectFavorites);
-  console.log("weatherData::", weatherData);
 
   useEffect(() => {
     dispatch(getWeatherThunk(searchTerm));

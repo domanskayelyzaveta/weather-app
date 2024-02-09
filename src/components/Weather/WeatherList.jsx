@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { selectFavorites } from "../redux/selectors";
 import sprite from "../../images/sprite.svg";
 import {
+  FavoriteWrapper,
   ListWrapper,
   StyledSvgDiv,
   SvgCross,
@@ -13,16 +14,24 @@ import { removeFromFavorites } from "../redux/slice";
 import { nanoid } from "nanoid";
 import {
   DateParagraph,
+  DegSpan,
+  DegSwitcherDiv,
   Img,
+  MainWeatherInfoP,
+  OrangeSpan,
   ParagraphSun,
+  Span,
   StyledChartDiv,
   StyledDegreeBtn,
+  StyledFeelsPar,
   StyledImgSunDiv,
   StyledTemperature,
   StyledTitleWrapper,
   StyledWeatherInfoDiv,
+  TemperatureDiv,
   TitleH2,
   WeatherCardWrapper,
+  WeatherInfoDiv,
 } from "./WeatherCard.styled";
 import moment from "moment";
 import { useTranslation } from "react-i18next";
@@ -32,7 +41,6 @@ const WeatherList = ({ weatherData }) => {
   const { t } = useTranslation();
 
   const favoriteWeather = useSelector(selectFavorites);
-  console.log("FAVORITE LIST", favoriteWeather);
   const dispatch = useDispatch();
   const [unit, setUnit] = useState("celsius");
 
@@ -50,6 +58,10 @@ const WeatherList = ({ weatherData }) => {
 
   //   return formattedDate;
   // };
+
+  const temperatureData = favoriteWeather.map((favorite) => ({
+    temperature: favorite.list[0].main.temp,
+  }));
 
   const formatDate = (dateString) => {
     const date = moment(dateString);
@@ -91,17 +103,27 @@ const WeatherList = ({ weatherData }) => {
   const chartDataArray = favoriteWeather.map((weather) => weather.list);
 
   return (
-    <div>
+    <FavoriteWrapper>
       {favoriteWeather.map((favorite, index) => {
+        const cardBackgroundColor =
+          Math.round(convertTemperature(favorite.list[0].main.temp)) < 0
+            ? "#F1F2FF"
+            : "#FFFAF1";
+        const spanColor =
+          Math.round(convertTemperature(favorite.list[0].main.temp)) < 0
+            ? "#459DE9"
+            : "#FFA25B";
         return (
-          <WeatherCardWrapper key={index}>
+          <WeatherCardWrapper key={index} backgroundColor={cardBackgroundColor}>
             <StyledSvgDiv>
               <SvgCross onClick={() => handleRemoveItem(index)}>
                 <use href={`${sprite}#icon-cross`}></use>
               </SvgCross>
             </StyledSvgDiv>
             <StyledTitleWrapper>
-              <TitleH2>{favorite.city.name}</TitleH2>
+              <TitleH2>
+                {favorite.city.name}, {favorite.city.country}
+              </TitleH2>
               <StyledImgSunDiv>
                 <Img src={iconUrl} alt="sun" />
                 <ParagraphSun>{sunnyWeatherStatus}</ParagraphSun>
@@ -115,56 +137,77 @@ const WeatherList = ({ weatherData }) => {
             </StyledChartDiv> */}
 
             <StyledChartDiv>
-              <Chart data={chartDataArray[index]} />
+              <Chart
+                data={chartDataArray[index]}
+                temperature={temperatureData}
+              />
             </StyledChartDiv>
 
             <StyledWeatherInfoDiv>
-              <div>
+              <TemperatureDiv>
+                {/* <StyledTemperature>
+                  {Math.round(convertTemperature(favorite.list[0].main.temp))}
+                </StyledTemperature> */}
+
                 <StyledTemperature>
+                  {convertTemperature(favorite.list[0].main.temp) > 0
+                    ? "+"
+                    : ""}
                   {Math.round(convertTemperature(favorite.list[0].main.temp))}
                 </StyledTemperature>
-                <p>
-                  {t("feels_like")}:
-                  {Math.round(
-                    convertTemperature(favorite.list[0].main.feels_like)
-                  )}
-                  {unit === "celsius" ? "C°" : "F°"}
-                </p>
-              </div>
 
-              <div>
-                <StyledDegreeBtn
-                  onClick={() => setUnit("celsius")}
-                  $active={unit === "celsius"}
-                >
-                  °C
-                </StyledDegreeBtn>
-                <StyledDegreeBtn
-                  onClick={() => setUnit("fahrenheit")}
-                  $active={unit === "fahrenheit"}
-                >
-                  °F
-                </StyledDegreeBtn>
-              </div>
+                <StyledFeelsPar>
+                  {t("feels_like")}:&nbsp;
+                  <DegSpan>
+                    {Math.round(
+                      convertTemperature(favorite.list[0].main.feels_like)
+                    )}
+                    &nbsp;
+                    {unit === "celsius" ? "°C" : "°F"}
+                  </DegSpan>
+                </StyledFeelsPar>
 
-              <div>
-                <p>
-                  {t("wind")}: {favorite.list[0].wind.speed} <span>m/s</span>
-                </p>
-                <p>
-                  {t("humidity")}: {favorite.list[0].main.humidity}
-                  <span>%</span>
-                </p>
-                <p>
-                  {t("pressure")}: {favorite.list[0].main.pressure}
-                  <span>Pa</span>
-                </p>
-              </div>
+                <DegSwitcherDiv>
+                  <StyledDegreeBtn
+                    onClick={() => setUnit("celsius")}
+                    $active={unit === "celsius"}
+                  >
+                    °C
+                  </StyledDegreeBtn>
+                  <StyledDegreeBtn
+                    onClick={() => setUnit("fahrenheit")}
+                    $active={unit === "fahrenheit"}
+                  >
+                    °F
+                  </StyledDegreeBtn>
+                </DegSwitcherDiv>
+              </TemperatureDiv>
+
+              <WeatherInfoDiv>
+                <MainWeatherInfoP>
+                  {t("wind")}: &nbsp;
+                  <OrangeSpan color={spanColor}>
+                    {Math.round(favorite.list[0].wind.speed)}&nbsp;m/s
+                  </OrangeSpan>
+                </MainWeatherInfoP>
+                <MainWeatherInfoP>
+                  {t("humidity")}: &nbsp;
+                  <OrangeSpan color={spanColor}>
+                    {favorite.list[0].main.humidity}%
+                  </OrangeSpan>
+                </MainWeatherInfoP>
+                <MainWeatherInfoP>
+                  {t("pressure")}: &nbsp;
+                  <OrangeSpan color={spanColor}>
+                    {favorite.list[0].main.pressure}Pa
+                  </OrangeSpan>
+                </MainWeatherInfoP>
+              </WeatherInfoDiv>
             </StyledWeatherInfoDiv>
           </WeatherCardWrapper>
         );
       })}
-    </div>
+    </FavoriteWrapper>
   );
 };
 

@@ -8,7 +8,6 @@ export const getWeatherThunk = createAsyncThunk(
   async (query, thunkAPI) => {
     try {
       const response = await fetchWeather(query);
-      console.log("RESPONSE1:", response);
       return response;
     } catch (error) {
       toast.error("Incorrect name");

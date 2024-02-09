@@ -123,17 +123,25 @@
 import React, { useEffect, useState } from "react";
 import ApexChart from "react-apexcharts";
 import { useDispatch, useSelector } from "react-redux";
-import { selectWeather } from "../redux/selectors";
+import { selectFavorites, selectWeather } from "../redux/selectors";
 import { StyledChartWrapper } from "./Chart.styled";
 import { getWeatherThunk } from "../redux/thunksAPI";
 
-const Chart = ({ data }) => {
+const Chart = ({ data, temperature }) => {
   const [chartData, setChartData] = useState([]);
   const dispatch = useDispatch();
 
   const weather = useSelector(selectWeather);
   const weatherData = weather.list;
   console.log("weatherLIST:", weatherData);
+
+  console.log("DATA:", data);
+
+  const temperatureO = weather;
+  console.log("TEMP:", temperature);
+
+  const favorites = useSelector(selectFavorites);
+  console.log("FAV:", favorites);
 
   useEffect(() => {
     dispatch(getWeatherThunk(""));
@@ -189,6 +197,7 @@ const Chart = ({ data }) => {
       offsetY: -4,
     },
     yaxis: {
+      tickAmount: 20,
       labels: {
         show: false,
       },
@@ -229,13 +238,24 @@ const Chart = ({ data }) => {
     {
       name: "Temperature",
       data: processTemperatureData(chartData).map((dataPoint) => dataPoint.y),
-      color: "#5B8CFF",
+      color: chartData.some((dataPoint) => dataPoint.y < 0)
+        ? "#5B8CFF"
+        : "#FFA25B",
+      stroke: {
+        curve: "smooth",
+      },
     },
   ];
 
   return (
     <StyledChartWrapper>
-      <ApexChart options={options} series={series} type="area" height={70} />
+      <ApexChart
+        options={options}
+        series={series}
+        type="area"
+        width={343}
+        height={90}
+      />
     </StyledChartWrapper>
   );
 };

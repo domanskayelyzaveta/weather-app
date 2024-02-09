@@ -29,7 +29,6 @@ const weatherSlice = createSlice({
       .addCase(getWeatherThunk.fulfilled, (state, action) => {
         state.isLoading = false;
         state.weather = action.payload;
-        console.log("LIST_STATE_WEATHER:", action.payload);
         state.error = null;
       })
       .addCase(getWeatherThunk.rejected, (state, action) => {

@@ -13,23 +13,5 @@ export const fetchWeather = async (query = "", units = "metric", cnt = 18) => {
       appid: API_KEY,
     },
   });
-  console.log(data);
   return data;
 };
-
-// export const fetchDailyWeather = async (
-//   query = "",
-//   units = "metric",
-//   cnt = 20
-// ) => {
-//   const { data } = await $instance.get("/", {
-//     params: {
-//       q: query,
-//       cnt,
-//       units,
-//       appid: API_KEY,
-//     },
-//   });
-//   console.log(data);
-//   return data;
-// };
