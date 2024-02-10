@@ -6,7 +6,6 @@ export const WeatherCardWrapper = styled.div`
   width: 350px;
   height: 257px;
 
-  // background: #fffaf1 0% 0% no-repeat padding-box;
   background: ${(props) => props.backgroundColor || "#fffaf1"};
   box-shadow: 0px 3px 6px #00000029;
   border-radius: 5px;
@@ -41,11 +40,11 @@ export const ParagraphSun = styled.p`
   color: #c5c5c5;
 `;
 
-export const DateParagraph = styled.p`
-  font-size: 18px;
-  font-weight: 300;
-  margin-bottom: 12px;
-`;
+// export const DateParagraph = styled.p`
+//   font-size: 18px;
+//   font-weight: 300;
+//   margin-bottom: 12px;
+// `;
 
 export const TitleH2 = styled.h2`
   font-size: 16px;
@@ -74,7 +73,6 @@ export const StyledDegreeBtn = styled.button`
   border: none;
   font-size: 22px;
   font-weight: 500;
-  // color: #c5c5c5;
 
   color: ${(props) => (props.$active ? "black" : "grey")};
 

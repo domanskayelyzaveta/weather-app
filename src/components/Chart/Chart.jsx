@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import ApexChart from "react-apexcharts";
 import { StyledChartWrapper } from "./Chart.styled";
 
-const Chart = ({ data, temperature }) => {
+const Chart = ({ data }) => {
   const [chartData, setChartData] = useState([]);
 
   useEffect(() => {

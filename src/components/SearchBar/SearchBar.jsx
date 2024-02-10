@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getWeatherThunk } from "../redux/thunksAPI";
 import WeatherCard from "../Weather/WeatherCard";
 import { addToFavorites } from "../redux/slice";
-import { selectWeather } from "../redux/selectors";
+import { selectFavorites, selectWeather } from "../redux/selectors";
 import { nanoid } from "nanoid";
 import { SearchBarWrapper, StyledAddBtn } from "./SearchBar.styled";
 import { AsyncPaginate } from "react-select-async-paginate";
@@ -13,10 +13,11 @@ import { fetchWeatherData } from "../../service/api";
 const SearchBar = ({ location }) => {
   const [loading, setLoading] = useState(false);
   const [selectedCity, setSelectedCity] = useState(null);
-  // const [selectedCityFromSearch, setSelectedCityFromSearch] = useState(null);
 
   const dispatch = useDispatch();
+
   const weatherData = useSelector(selectWeather);
+  const favorites = useSelector(selectFavorites);
 
   useEffect(() => {
     if (selectedCity) {
@@ -24,31 +25,7 @@ const SearchBar = ({ location }) => {
     }
   }, [dispatch, selectedCity]);
 
-  // const loadOptions = async (inputValue, loadedOptions) => {
-  //   if (inputValue.trim() === "") {
-  //     return { options: [] };
-  //   }
-
-  //   try {
-  //     setLoading(true);
-  //     const response = await fetch(
-  //       `https://api.openweathermap.org/geo/1.0/direct?q=${inputValue}&limit=5&appid=18431911169fef4afbe92c0ef62b8409`
-  //     );
-  //     const data = await response.json();
-  //     const options = data.map((city) => ({
-  //       value: `${city.name}, ${city.country}`,
-  //       label: `${city.name}, ${city.country}`,
-  //     }));
-  //     return { options };
-  //   } catch (error) {
-  //     console.error("Error fetching data:", error);
-  //     return { options: [] };
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
-  const loadOptions = async (inputValue, loadedOptions) => {
+  const loadOptions = async (inputValue) => {
     if (inputValue.trim() === "") {
       return { options: [] };
     }
@@ -68,9 +45,18 @@ const SearchBar = ({ location }) => {
 
   const handleAddClick = () => {
     if (selectedCity) {
-      dispatch(addToFavorites(weatherData));
-      setSelectedCity(null);
-      toast.success("Weather card successfully added to favorites");
+      const isCityAlreadyAdded = favorites.some(
+        (favorite) =>
+          favorites[0]?.city?.name + ", " + favorites[0].city?.country ===
+          selectedCity?.value
+      );
+      if (isCityAlreadyAdded) {
+        toast.info("This city is already in favorites");
+      } else {
+        dispatch(addToFavorites(weatherData));
+        setSelectedCity(null);
+        toast.success("Weather card successfully added to favorites");
+      }
     } else {
       toast.info("Please select a city before adding");
     }
@@ -107,6 +93,8 @@ const SearchBar = ({ location }) => {
 };
 
 export default SearchBar;
+
+// * Styles
 
 const customStyles = {
   control: (provided, state) => ({

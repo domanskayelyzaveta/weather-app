@@ -27,6 +27,7 @@ const resources = {
       longMonths: {
         January: "Jan",
         February: "Feb",
+        Feb: "Feb",
         March: "Mar",
         April: "Apr",
         May: "May",

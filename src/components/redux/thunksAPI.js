@@ -9,7 +9,7 @@ export const getWeatherThunk = createAsyncThunk(
       const response = await fetchWeather(query);
       return response;
     } catch (error) {
-      toast.error("Failed request");
+      toast.error("City not found");
       return thunkAPI.rejectWithValue(error.message);
     }
   }

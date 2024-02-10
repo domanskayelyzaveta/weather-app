@@ -5,6 +5,7 @@ const initialState = {
   weather: [],
   dailyWeather: {},
   favorites: [],
+  isLoading: false,
 };
 
 const weatherSlice = createSlice({

@@ -11,18 +11,22 @@ import { I18nextProvider } from "react-i18next";
 import i18n from "./i18n";
 import axios from "axios";
 import { addToFavorites } from "./components/redux/slice";
+import Loader from "./components/Loader/Loader";
 
 const App = () => {
   const [cities, setCities] = useState([]);
   const [weatherData, setWeatherData] = useState(null);
-  const favorites = useSelector(selectFavorites);
   const [location, setLocation] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const favorites = useSelector(selectFavorites);
 
   useEffect(() => {
     currentLocationWeather();
   }, []);
 
   const currentLocationWeather = () => {
+    setIsLoading(true);
     navigator.geolocation.getCurrentPosition(
       async (position) => {
         const { latitude, longitude } = position.coords;
@@ -43,10 +47,13 @@ const App = () => {
           setLocation({ latitude, longitude });
         } catch (error) {
           toast.error("Error fetching weather data:", error);
+        } finally {
+          setIsLoading(false);
         }
       },
       (error) => {
         toast.error("Error getting current location:", error);
+        setIsLoading(false);
       }
     );
   };
@@ -61,9 +68,15 @@ const App = () => {
           addToFavorites={addToFavorites}
           location={location}
         />
-        {weatherData && <WeatherCard weatherData={weatherData} />}
-        {favorites.length > 0 && <WeatherList cities={cities} />}
-        <ToastContainer position="top-center" autoClose={3000} />
+        {isLoading ? (
+          <Loader />
+        ) : (
+          <>
+            {weatherData && <WeatherCard weatherData={weatherData} />}
+            {favorites.length > 0 && <WeatherList cities={cities} />}
+            <ToastContainer position="top-center" autoClose={3000} />
+          </>
+        )}
       </div>
     </I18nextProvider>
   );
