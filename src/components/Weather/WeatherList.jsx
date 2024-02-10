@@ -1,38 +1,31 @@
-// WeatherList.js
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { selectFavorites } from "../redux/selectors";
 import sprite from "../../images/sprite.svg";
-import {
-  FavoriteWrapper,
-  ListWrapper,
-  StyledSvgDiv,
-  SvgCross,
-  WrapperSvg,
-} from "./WeatherList.styles";
 import { removeFromFavorites } from "../redux/slice";
-import { nanoid } from "nanoid";
+
 import {
   DateParagraph,
   DegSpan,
   DegSwitcherDiv,
+  FavoriteWrapper,
   Img,
   MainWeatherInfoP,
   OrangeSpan,
   ParagraphSun,
-  Span,
   StyledChartDiv,
   StyledDegreeBtn,
   StyledFeelsPar,
   StyledImgSunDiv,
+  StyledSvgDiv,
   StyledTemperature,
   StyledTitleWrapper,
   StyledWeatherInfoDiv,
+  SvgCross,
   TemperatureDiv,
   TitleH2,
   WeatherCardWrapper,
   WeatherInfoDiv,
-  WeatherListWrapper,
 } from "./WeatherCard.styled";
 import moment from "moment";
 import { useTranslation } from "react-i18next";
@@ -45,28 +38,13 @@ const WeatherList = ({ weatherData }) => {
   const dispatch = useDispatch();
   const [unit, setUnit] = useState("celsius");
 
-  const icon = favoriteWeather[0].list[0].weather[0].icon;
-  const iconUrl = `http://openweathermap.org/img/wn/${icon}.png`;
-
   const weatherStatus = favoriteWeather[0].list[0].weather[0].main;
 
   const sunnyWeatherStatus =
     weatherStatus === "Clear" ? t("Sunny") : t(weatherStatus);
 
-  // const formatDate = (dateString) => {
-  //   const date = moment(dateString);
-  //   const formattedDate = date.format("ddd, D MMMM, HH:mm");
-
-  //   return formattedDate;
-  // };
-
-  const temperatureData = favoriteWeather.map((favorite) => ({
-    temperature: favorite.list[0].main.temp,
-  }));
-
   const formatDate = (dateString) => {
     const date = moment(dateString);
-    const formattedDate = date.format("ddd, D MMMM, HH:mm");
 
     const shortDay = date.format("ddd");
     const longMonth = date.format("MMMM");
@@ -126,16 +104,14 @@ const WeatherList = ({ weatherData }) => {
                 {favorite.city.name}, {favorite.city.country}
               </TitleH2>
               <StyledImgSunDiv>
-                <Img src={iconUrl} alt="sun" />
+                <Img
+                  src={`http://openweathermap.org/img/wn/${favorite.list[0].weather[0].icon}.png`}
+                  alt="sun"
+                />
                 <ParagraphSun>{sunnyWeatherStatus}</ParagraphSun>
               </StyledImgSunDiv>
             </StyledTitleWrapper>
-            {/* <DateParagraph>{formattedDate}</DateParagraph> */}
             <DateParagraph>{t(formattedDate)}</DateParagraph>
-
-            {/* <StyledChartDiv>
-              <Chart data={favoriteWeather.list} />
-            </StyledChartDiv> */}
 
             <StyledChartDiv>
               <Chart
@@ -146,10 +122,6 @@ const WeatherList = ({ weatherData }) => {
 
             <StyledWeatherInfoDiv>
               <TemperatureDiv>
-                {/* <StyledTemperature>
-                  {Math.round(convertTemperature(favorite.list[0].main.temp))}
-                </StyledTemperature> */}
-
                 <StyledTemperature>
                   {convertTemperature(favorite.list[0].main.temp) > 0
                     ? "+"

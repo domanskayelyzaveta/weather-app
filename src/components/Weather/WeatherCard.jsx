@@ -1,4 +1,3 @@
-// import React from "react";
 import { useSelector } from "react-redux";
 import { selectWeather } from "../redux/selectors";
 import {
@@ -21,7 +20,6 @@ import {
   WeatherCardWrapper,
   WeatherInfoDiv,
 } from "./WeatherCard.styled";
-// import moment from "moment";
 import Chart from "../Chart/Chart";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -106,13 +104,6 @@ const WeatherCard = ({ weatherData }) => {
 
       <StyledWeatherInfoDiv>
         <TemperatureDiv>
-          {/* <StyledTemperature>
-            {Math.round(convertTemperature(weatherData.main.temp, unit)) > 0
-              ? "+" +
-                Math.round(convertTemperature(weatherData.main.temp, unit))
-              : Math.round(convertTemperature(weatherData.main.temp, unit))}
-          </StyledTemperature> */}
-
           <StyledTemperature>
             {temperatureSign}
             {temperatureAbs}

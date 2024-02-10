@@ -123,3 +123,38 @@ export const OrangeSpan = styled.span`
   font-weight: 600;
   font-family: "DM Sans";
 `;
+
+export const FavoriteWrapper = styled.div`
+  display: flex;
+
+  flex-wrap: wrap;
+  gap: 12px 26px;
+
+  @media screen and (min-width: 1920px) {
+    gap: 12px 26px;
+    & > * {
+      flex-basis: calc((100% - 4 * 30px) / 5);
+    }
+  }
+`;
+
+export const ListWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 200px;
+`;
+
+export const WrapperSvg = styled.div`
+  display: flex;
+  justify-content: flex-end;
+`;
+
+export const SvgCross = styled.svg`
+  width: 8px;
+  height: 8px;
+`;
+
+export const StyledSvgDiv = styled.div`
+  display: flex;
+  justify-content: flex-end;
+`;
