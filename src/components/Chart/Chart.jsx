@@ -1,16 +1,9 @@
 import React, { useEffect, useState } from "react";
 import ApexChart from "react-apexcharts";
-import { useDispatch } from "react-redux";
 import { StyledChartWrapper } from "./Chart.styled";
-import { getWeatherThunk } from "../redux/thunksAPI";
 
 const Chart = ({ data, temperature }) => {
   const [chartData, setChartData] = useState([]);
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(getWeatherThunk(""));
-  }, [dispatch]);
 
   useEffect(() => {
     if (data?.length > 0) {

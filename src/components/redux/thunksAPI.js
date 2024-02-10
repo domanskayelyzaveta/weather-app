@@ -1,7 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-
-import { toast } from "react-toastify";
 import { fetchWeather } from "../../service/api";
+import { toast } from "react-toastify";
 
 export const getWeatherThunk = createAsyncThunk(
   "weather/weatherThunk",
@@ -10,7 +9,7 @@ export const getWeatherThunk = createAsyncThunk(
       const response = await fetchWeather(query);
       return response;
     } catch (error) {
-      toast.error("Incorrect name");
+      toast.error("Failed request");
       return thunkAPI.rejectWithValue(error.message);
     }
   }

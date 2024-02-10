@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { getWeatherThunk } from "../redux/thunksAPI";
 import WeatherCard from "../Weather/WeatherCard";
@@ -8,10 +9,10 @@ import { nanoid } from "nanoid";
 import { SearchBarWrapper, StyledAddBtn } from "./SearchBar.styled";
 import { AsyncPaginate } from "react-select-async-paginate";
 
-const SearchBar = () => {
+const SearchBar = ({ location }) => {
   const [loading, setLoading] = useState(false);
   const [selectedCity, setSelectedCity] = useState(null);
-  const [selectedCityFromSearch, setSelectedCityFromSearch] = useState(null);
+  // const [selectedCityFromSearch, setSelectedCityFromSearch] = useState(null);
 
   const dispatch = useDispatch();
   const weatherData = useSelector(selectWeather);
@@ -54,6 +55,9 @@ const SearchBar = () => {
     if (selectedCity) {
       dispatch(addToFavorites(weatherData));
       setSelectedCity(null);
+      toast.success("Weather card successfully added to favorites");
+    } else {
+      toast.info("Please select a city before adding");
     }
   };
 
@@ -74,7 +78,7 @@ const SearchBar = () => {
 
       <div>
         <ul>
-          {selectedCityFromSearch && (
+          {(!location || location === "") && (
             <div>
               {weatherData?.list?.slice(0, 1).map((weatherDataItem) => (
                 <WeatherCard key={nanoid()} weatherData={weatherDataItem} />

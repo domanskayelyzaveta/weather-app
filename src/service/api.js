@@ -15,3 +15,16 @@ export const fetchWeather = async (query = "", units = "metric", cnt = 18) => {
   });
   return data;
 };
+
+export async function fetchWeatherDataByCity(city) {
+  try {
+    const response = await fetch(
+      `https://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=5&appid=18431911169fef4afbe92c0ef62b8409`
+    );
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    return null;
+  }
+}

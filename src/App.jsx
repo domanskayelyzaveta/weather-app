@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import WeatherList from "./components/Weather/WeatherList";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { useSelector } from "react-redux";
 import SearchBar from "./components/SearchBar/SearchBar";
 import WeatherCard from "./components/Weather/WeatherCard";
@@ -12,8 +14,9 @@ import { addToFavorites } from "./components/redux/slice";
 
 const App = () => {
   const [cities, setCities] = useState([]);
-  const favorites = useSelector(selectFavorites);
   const [weatherData, setWeatherData] = useState(null);
+  const favorites = useSelector(selectFavorites);
+  const [location, setLocation] = useState(null);
 
   useEffect(() => {
     currentLocationWeather();
@@ -37,12 +40,13 @@ const App = () => {
           );
           const weatherData = response.data;
           setWeatherData(weatherData);
+          setLocation({ latitude, longitude });
         } catch (error) {
-          console.error("Error fetching weather data:", error);
+          toast.error("Error fetching weather data:", error);
         }
       },
       (error) => {
-        console.error("Error getting current location:", error);
+        toast.error("Error getting current location:", error);
       }
     );
   };
@@ -55,9 +59,11 @@ const App = () => {
           cities={cities}
           setCities={setCities}
           addToFavorites={addToFavorites}
+          location={location}
         />
         {weatherData && <WeatherCard weatherData={weatherData} />}
         {favorites.length > 0 && <WeatherList cities={cities} />}
+        <ToastContainer position="top-center" autoClose={3000} />
       </div>
     </I18nextProvider>
   );
