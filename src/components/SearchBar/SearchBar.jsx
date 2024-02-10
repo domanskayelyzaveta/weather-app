@@ -127,7 +127,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getWeatherThunk } from "../redux/thunksAPI";
 import WeatherCard from "../Weather/WeatherCard";
 import { addToFavorites } from "../redux/slice";
-import { selectWeather } from "../redux/selectors";
+import { selectFavorites, selectWeather } from "../redux/selectors";
 import { nanoid } from "nanoid";
 import {
   SearchBarWrapper,
@@ -139,9 +139,11 @@ import { AsyncPaginate } from "react-select-async-paginate";
 const SearchBar = () => {
   const [loading, setLoading] = useState(false);
   const [selectedCity, setSelectedCity] = useState(null);
+  const [selectedCityFromSearch, setSelectedCityFromSearch] = useState(null);
 
   const dispatch = useDispatch();
   const weatherData = useSelector(selectWeather);
+  const favorites = useSelector(selectFavorites);
 
   useEffect(() => {
     if (selectedCity) {
@@ -198,7 +200,8 @@ const SearchBar = () => {
         />
         <StyledAddBtn onClick={handleAddClick}>Add</StyledAddBtn>
       </SearchBarWrapper>
-      <div>
+
+      {/* <div>
         {selectedCity && (
           <WeatherCard
             key={nanoid()}
@@ -208,11 +211,11 @@ const SearchBar = () => {
             humidity={selectedCity.humidity}
           />
         )}
-      </div>
+      </div> */}
 
       <div>
         <ul>
-          {selectedCity && (
+          {selectedCityFromSearch && (
             <div>
               {weatherData?.list?.slice(0, 1).map((weatherDataItem) => (
                 <WeatherCard key={nanoid()} weatherData={weatherDataItem} />

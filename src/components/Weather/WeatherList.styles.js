@@ -8,11 +8,16 @@ export const ListWrapper = styled.div`
 
 export const FavoriteWrapper = styled.div`
   display: flex;
-  flex-wrap: wrap;
-  gap: 12px 30px;
+  justify-content: space-between;
 
-  & > * {
-    flex-basis: calc((100% - 4 * 30px) / 5);
+  flex-wrap: wrap;
+  gap: 12px 26px;
+
+  @media screen and (min-width: 1920px) {
+    gap: 12px 26px;
+    & > * {
+      flex-basis: calc((100% - 4 * 30px) / 5);
+    }
   }
 `;
 

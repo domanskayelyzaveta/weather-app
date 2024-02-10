@@ -34,12 +34,24 @@ const WeatherCard = ({ weatherData }) => {
 
   const [unit, setUnit] = useState("celsius");
 
+  const weatherStatus = weatherData?.weather[0]?.main;
+  const icon = weatherData?.weather[0]?.icon;
+
   const cityName = weather?.city?.name;
   const country = weather?.city?.country;
-  const icon = weatherData?.weather[0].icon;
-  const weatherStatus = weatherData?.weather[0]?.main;
+  const temp =
+    weather?.list?.[0]?.main?.temp !== undefined
+      ? weather.list[0].main.temp
+      : null;
+  const weatherIco = weather?.list?.[0]?.weather[0]?.icon;
+  const weatherStat = weather?.list?.[0]?.weather[0]?.main;
+  const wind = weather?.list?.[0]?.wind.speed;
+  const humidity = weather?.list?.[0]?.main.humidity;
+  const pressure = weather?.list?.[0]?.main.pressure;
+  const feelsLike = weather?.list?.[0]?.main?.feels_like;
+  const chartWeather = weather?.list;
 
-  const iconUrl = `http://openweathermap.org/img/wn/${icon}.png`;
+  const iconUrl = `http://openweathermap.org/img/wn/${weatherIco || icon}.png`;
 
   if (
     !weatherData ||
@@ -53,29 +65,16 @@ const WeatherCard = ({ weatherData }) => {
   const sunnyWeatherStatus =
     weatherStatus === "Clear" ? t("Sunny") : t(weatherStatus);
 
-  // const formatDate = (dateString) => {
-  //   const date = moment(dateString);
-  //   const formattedDate = date.format("ddd, D MMMM, HH:mm");
-
-  //   return formattedDate;
-  // };
+  const statusWeather = weatherStat === "Clear" ? t("Sunny") : t(weatherStat);
 
   const originalDate = weatherData?.dt_txt;
   const formattedDate = formatDate(originalDate);
 
-  const temperature = convertTemperature(weatherData.main.temp, unit);
-  const feelsLikeTemperature = convertTemperature(
-    weatherData.main.feels_like,
-    unit
-  );
-
-  // const convertTemperature = (value) => {
-  //   if (unit === "celsius") {
-  //     return value;
-  //   } else {
-  //     return Math.round((value * 9) / 5 + 32);
-  //   }
-  // };
+  const tempValue =
+    temp !== null && temp !== undefined ? temp : weatherData.main.temp;
+  const temperature = Math.round(convertTemperature(tempValue, unit));
+  const temperatureSign = temperature < 0 ? "-" : "+";
+  const temperatureAbs = Math.abs(temperature);
 
   const cardBackgroundColor =
     Math.round(convertTemperature(weatherData.main.temp)) < 0
@@ -95,28 +94,37 @@ const WeatherCard = ({ weatherData }) => {
         </TitleH2>
         <StyledImgSunDiv>
           <Img src={iconUrl} alt="sun" />
-          <ParagraphSun>{sunnyWeatherStatus}</ParagraphSun>
+          <ParagraphSun>{statusWeather || sunnyWeatherStatus}</ParagraphSun>
         </StyledImgSunDiv>
       </StyledTitleWrapper>
 
       <DateParagraph>{formattedDate}</DateParagraph>
 
       <StyledChartDiv>
-        <Chart data={weather.list} />
+        <Chart data={chartWeather} />
       </StyledChartDiv>
 
       <StyledWeatherInfoDiv>
         <TemperatureDiv>
+          {/* <StyledTemperature>
+            {Math.round(convertTemperature(weatherData.main.temp, unit)) > 0
+              ? "+" +
+                Math.round(convertTemperature(weatherData.main.temp, unit))
+              : Math.round(convertTemperature(weatherData.main.temp, unit))}
+          </StyledTemperature> */}
+
           <StyledTemperature>
-            {Math.round(convertTemperature(temperature, unit)) > 0
-              ? "+" + Math.round(convertTemperature(temperature, unit))
-              : Math.round(convertTemperature(temperature, unit))}
+            {temperatureSign}
+            {temperatureAbs}
           </StyledTemperature>
 
           <StyledFeelsPar>
             {t("feels_like")}:&nbsp;
             <DegSpan>
-              {Math.round(convertTemperature(feelsLikeTemperature))}
+              {Math.round(convertTemperature(feelsLike, unit)) ||
+                Math.round(
+                  convertTemperature(weatherData.main.feels_like, unit)
+                )}
               &nbsp;
               {unit === "celsius" ? "°C" : "°F"}
             </DegSpan>
@@ -142,19 +150,19 @@ const WeatherCard = ({ weatherData }) => {
           <MainWeatherInfoP>
             {t("wind")}: &nbsp;
             <OrangeSpan color={spanColor}>
-              {weatherData.wind.speed}m/s
+              {wind || weatherData.wind.speed}m/s
             </OrangeSpan>
           </MainWeatherInfoP>
           <MainWeatherInfoP>
             {t("humidity")}: &nbsp;
             <OrangeSpan color={spanColor}>
-              {weatherData.main.humidity}%
+              {humidity || weatherData.main.humidity}%
             </OrangeSpan>
           </MainWeatherInfoP>
           <MainWeatherInfoP>
             {t("pressure")}: &nbsp;
             <OrangeSpan color={spanColor}>
-              {weatherData.main.pressure}Pa
+              {pressure || weatherData.main.pressure}Pa
             </OrangeSpan>
           </MainWeatherInfoP>
         </WeatherInfoDiv>

@@ -133,7 +133,6 @@ const Chart = ({ data, temperature }) => {
 
   const weather = useSelector(selectWeather);
   const weatherData = weather.list;
-  console.log("weatherLIST:", weatherData);
 
   console.log("DATA:", data);
 
@@ -164,8 +163,15 @@ const Chart = ({ data, temperature }) => {
   const processTemperatureData = (data) => {
     return data.map((dataPoint) => ({
       x: dataPoint.x,
-      y: dataPoint.y < 0 ? -dataPoint.y : dataPoint.y,
+      y: Math.round(dataPoint.y < 0 ? -dataPoint.y : dataPoint.y),
     }));
+  };
+
+  const formatDate = (date) => {
+    const options = { day: "2-digit", month: "2-digit" };
+    const formattedDate = new Date(date).toLocaleDateString("en-US", options);
+    const [month, day] = formattedDate.split("/");
+    return `${day}.${month}`;
   };
 
   const options = {
@@ -215,7 +221,8 @@ const Chart = ({ data, temperature }) => {
       },
     },
     xaxis: {
-      categories: chartData.map((dataPoint) => dataPoint.x),
+      categories: chartData.map((dataPoint) => formatDate(dataPoint.x)),
+      // categories: chartData.map((dataPoint) => dataPoint.x),
       axisBorder: {
         show: false,
       },

@@ -102,6 +102,7 @@ export const WeatherInfoDiv = styled.div`
 `;
 
 export const StyledFeelsPar = styled.p`
+  width: 200px;
   font-size: 13px;
   color: #c5c5c5;
 `;

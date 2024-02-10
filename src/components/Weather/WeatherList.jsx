@@ -32,6 +32,7 @@ import {
   TitleH2,
   WeatherCardWrapper,
   WeatherInfoDiv,
+  WeatherListWrapper,
 } from "./WeatherCard.styled";
 import moment from "moment";
 import { useTranslation } from "react-i18next";
@@ -139,7 +140,7 @@ const WeatherList = ({ weatherData }) => {
             <StyledChartDiv>
               <Chart
                 data={chartDataArray[index]}
-                temperature={temperatureData}
+                // temperature={temperatureData}
               />
             </StyledChartDiv>
 
