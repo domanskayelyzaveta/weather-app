@@ -1,0 +1,110 @@
+@import url("normalize");
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Jost", 'Segoe UI', 'Roboto',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Jost", 'Courier New',
+    monospace;
+}
+
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: "Roboto", sans-serif;
+}
+
+
+img {
+  display: block;
+}
+
+h1,
+h2,
+h3,
+h4,
+p,
+ul,
+li {
+  font-family: "Jost", sans-serif;
+  font-style: normal;
+  list-style: none;
+  margin-top: 0;
+  margin-bottom: 0;
+  padding: 0;
+}
+
+p {
+  font-family: "Jost", sans-serif;
+  font-style: normal;
+  margin-top: 0;
+  margin-bottom: 0;
+  padding: 0;
+}
+
+.list {
+  list-style-type: none;
+}
+
+.link {
+  text-decoration: none;
+}
+
+a {
+  text-decoration: none;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+button {
+  cursor: pointer;
+  font-family: "Jost", sans-serif;
+}
+
+.apexcharts-xaxis-tick {
+  display: none;
+}
+
+
+.container {
+  width: 100%;
+  max-width: 375px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 24px;
+  padding-right: 24px;
+
+}
+
+
+
+@media screen and (min-width: 1440px) {
+  .container {
+    max-width: 1440px;
+    padding: 25px;
+  }
+}
+
+
+@media screen and (min-width: 1920px) {
+  .container {
+    max-width: 1920px;
+    padding: 25px;
+  }
+}
