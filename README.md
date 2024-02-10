@@ -4,9 +4,13 @@ This is a simple weather application that allows users to check the weather base
 
 Features:
 
-## Geolocation Weather: Users can check the weather based on their current geolocation.
+### Geolocation Weather:
 
-## Favorite Weather Cards: Users can add weather cards to their favorites for quick access.
+Users can check the weather based on their current geolocation.
+
+### Favorite Weather Cards:
+
+Users can add weather cards to their favorites for quick access.
 
 Technologies Used:
 React ⚛
@@ -34,9 +38,13 @@ Click the "Add" button to add a weather card to your favorites.
 
 Особливості:
 
-## Погода за геолокацією: Користувачі можуть перевіряти погоду на основі їх поточної геолокації.
+### Погода за геолокацією:
 
-## Вибрані картки погоди: Користувачі можуть додавати картки погоди до вибраних для швидкого доступу.
+Користувачі можуть перевіряти погоду на основі їх поточної геолокації.
+
+### Вибрані картки погоди:
+
+Користувачі можуть додавати картки погоди до вибраних для швидкого доступу.
 
 Використані технології:
 React ⚛
