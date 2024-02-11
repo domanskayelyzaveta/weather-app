@@ -101,7 +101,7 @@ const Chart = ({ data, unit }) => {
   const series = [
     {
       name: "Temperature",
-      /// data: processTemperatureData(chartData).map((dataPoint) => dataPoint.y),
+      // data: processTemperatureData(chartData).map((dataPoint) => dataPoint.y),
       data: processTemperatureData(chartData).map((dataPoint) =>
         unit === "celsius"
           ? dataPoint.y
