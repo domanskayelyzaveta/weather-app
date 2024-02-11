@@ -1,6 +1,7 @@
 import { useSelector } from "react-redux";
-import { selectLoader, selectWeather } from "../redux/selectors";
+import { selectWeather } from "../redux/selectors";
 import {
+  DateParagraph,
   DegSpan,
   DegSwitcherDiv,
   Img,
@@ -22,15 +23,12 @@ import {
 import Chart from "../Chart/Chart";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { convertTemperature } from "../../helpers";
-import Loader from "../Loader/Loader";
-import FormattedDate from "../../formatteDate";
+import { formatDate, convertTemperature } from "../../helpers";
 
 const WeatherCard = ({ weatherData }) => {
   const { t } = useTranslation();
 
   const weather = useSelector(selectWeather);
-  const isLoading = useSelector(selectLoader);
 
   const [unit, setUnit] = useState("celsius");
 
@@ -51,8 +49,6 @@ const WeatherCard = ({ weatherData }) => {
   const feelsLike = weather?.list?.[0]?.main?.feels_like;
   const chartWeather = weather?.list;
 
-  const originalDate = weather?.list?.[0].dt_txt;
-
   const iconUrl = `http://openweathermap.org/img/wn/${weatherIco || icon}.png`;
 
   if (
@@ -69,18 +65,27 @@ const WeatherCard = ({ weatherData }) => {
 
   const statusWeather = weatherStat === "Clear" ? t("Sunny") : t(weatherStat);
 
+  const originalDate = weatherData?.dt_txt;
+  const formattedDate = formatDate(originalDate);
+
   const tempValue =
     temp !== null && temp !== undefined ? temp : weatherData.main.temp;
   const temperature = Math.round(convertTemperature(tempValue, unit));
-  const temperatureSign = temperature < 0 ? "-" : "+";
+  const temperatureSign = temperature === 0 ? "" : temperature < 0 ? "-" : "+";
+
   const temperatureAbs = Math.abs(temperature);
 
-  const cardBackgroundColor = temperatureSign === "-" ? "#F1F2FF" : "#FFFAF1";
-  const spanColor = temperatureSign === "-" ? "#459DE9" : "#FFA25B";
+  const cardBackgroundColor =
+    Math.round(convertTemperature(weatherData.main.temp)) < 0
+      ? "#F1F2FF"
+      : "#FFFAF1";
 
-  return isLoading ? (
-    <Loader />
-  ) : (
+  const spanColor =
+    Math.round(convertTemperature(weatherData.main.temp)) < 0
+      ? "#459DE9"
+      : "#FFA25B";
+
+  return (
     <WeatherCardWrapper backgroundColor={cardBackgroundColor}>
       <StyledTitleWrapper>
         <TitleH2>
@@ -92,10 +97,10 @@ const WeatherCard = ({ weatherData }) => {
         </StyledImgSunDiv>
       </StyledTitleWrapper>
 
-      <FormattedDate dateString={originalDate} />
+      <DateParagraph>{formattedDate}</DateParagraph>
 
       <StyledChartDiv>
-        <Chart data={chartWeather} />
+        <Chart data={chartWeather} unit={unit} />
       </StyledChartDiv>
 
       <StyledWeatherInfoDiv>
