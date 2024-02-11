@@ -57,7 +57,7 @@ export const StyledWeatherInfoDiv = styled.div`
 `;
 
 export const StyledTemperature = styled.p`
-  font-family: "DM Sans";
+  font-family: "DM Sans", sans-serif;
   font-size: 44px;
   font-weight: 500;
 `;
@@ -113,7 +113,7 @@ export const MainWeatherInfoP = styled.p`
 export const OrangeSpan = styled.span`
   color: ${(props) => props.color || "#FFA25B"};
   font-weight: 600;
-  font-family: "DM Sans";
+  font-family: "DM Sans", sans-serif;
 `;
 
 export const FavoriteWrapper = styled.div`

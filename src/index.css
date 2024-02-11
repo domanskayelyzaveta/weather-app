@@ -24,7 +24,8 @@ html {
 
 body {
   margin: 0;
-  font-family: "Roboto", sans-serif;
+  font-family: "Jost",
+    sans-serif;
 }
 
 
@@ -39,7 +40,8 @@ h4,
 p,
 ul,
 li {
-  font-family: "Jost", sans-serif;
+  font-family: "Jost", sans-serif, "DM Sans",
+    sans-serif;
   font-style: normal;
   list-style: none;
   margin-top: 0;
@@ -47,13 +49,6 @@ li {
   padding: 0;
 }
 
-p {
-  font-family: "Jost", sans-serif;
-  font-style: normal;
-  margin-top: 0;
-  margin-bottom: 0;
-  padding: 0;
-}
 
 .list {
   list-style-type: none;
