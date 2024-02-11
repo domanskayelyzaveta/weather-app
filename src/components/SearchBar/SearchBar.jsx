@@ -94,7 +94,7 @@ const SearchBar = ({ location }) => {
 
 export default SearchBar;
 
-// * Styles //
+// * Styles
 
 const customStyles = {
   control: (provided, state) => ({
