@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import ApexChart from "react-apexcharts";
 import { StyledChartWrapper } from "./Chart.styled";
 
-const Chart = ({ data }) => {
+const Chart = ({ data, unit }) => {
   const [chartData, setChartData] = useState([]);
 
   useEffect(() => {
@@ -17,7 +17,7 @@ const Chart = ({ data }) => {
 
       setChartData(temperatureData);
     }
-  }, [data]);
+  }, [data, unit]);
 
   const processTemperatureData = (data) => {
     return data.map((dataPoint) => ({
@@ -101,16 +101,29 @@ const Chart = ({ data }) => {
   const series = [
     {
       name: "Temperature",
-      data: processTemperatureData(chartData).map((dataPoint) => dataPoint.y),
-      color: chartData.some((dataPoint) => dataPoint.y < 0)
-        ? "#5B8CFF"
-        : "#FFA25B",
+      /// data: processTemperatureData(chartData).map((dataPoint) => dataPoint.y),
+      data: processTemperatureData(chartData).map((dataPoint) =>
+        unit === "celsius"
+          ? dataPoint.y
+          : Math.round((dataPoint.y * 9) / 5 + 32)
+      ),
+      //     color: chartData.some((dataPoint) => dataPoint.y < 0)
+      //       ? "#5B8CFF"
+      //       : "#FFA25B",
+      //     stroke: {
+      //       curve: "smooth",
+      //     },
+      //   },
+      // ];
+      color:
+        unit === "celsius" && chartData.some((dataPoint) => dataPoint.y < 0)
+          ? "#5B8CFF"
+          : "#FFA25B",
       stroke: {
         curve: "smooth",
       },
     },
   ];
-
   return (
     <StyledChartWrapper>
       <ApexChart
