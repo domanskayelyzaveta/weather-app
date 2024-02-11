@@ -30,7 +30,7 @@ import { useTranslation } from "react-i18next";
 import Chart from "../Chart/Chart";
 import FormattedDate from "../../formatteDate";
 
-const WeatherList = ({ weatherData }) => {
+const WeatherList = () => {
   const { t } = useTranslation();
 
   const [unit, setUnit] = useState("celsius");

@@ -1,4 +1,4 @@
-# Weather App ⛅︎
+# Weather App ⛅︎ (Developed for 1920 px screen)
 
 This is a simple weather application that allows users to check the weather based on their geolocation and add weather cards to their favorites.
 
@@ -32,7 +32,7 @@ Allow geolocation access to get weather based on your current location.
 Type a city name in the search bar to get weather information for that city.
 Click the "Add" button to add a weather card to your favorites.
 
-# Додаток погоди ⛅︎
+# Додаток погоди ⛅︎ (Розроблено для екрану з розміром 1920 px)
 
 Це простий додаток, який дозволяє користувачам перевіряти погоду на основі їх геолокації та додавати картки погоди до вибраних.
 

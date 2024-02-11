@@ -101,20 +101,11 @@ const Chart = ({ data, unit }) => {
   const series = [
     {
       name: "Temperature",
-      // data: processTemperatureData(chartData).map((dataPoint) => dataPoint.y),
       data: processTemperatureData(chartData).map((dataPoint) =>
         unit === "celsius"
           ? dataPoint.y
           : Math.round((dataPoint.y * 9) / 5 + 32)
       ),
-      //     color: chartData.some((dataPoint) => dataPoint.y < 0)
-      //       ? "#5B8CFF"
-      //       : "#FFA25B",
-      //     stroke: {
-      //       curve: "smooth",
-      //     },
-      //   },
-      // ];
       color:
         unit === "celsius" && chartData.some((dataPoint) => dataPoint.y < 0)
           ? "#5B8CFF"

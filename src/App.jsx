@@ -52,7 +52,7 @@ const App = () => {
         }
       },
       (error) => {
-        toast.error("Error getting current location:", error);
+        toast.error("Access to geolocation is prohibited:", error);
         setIsLoading(false);
       }
     );

@@ -40,12 +40,6 @@ export const ParagraphSun = styled.p`
   color: #c5c5c5;
 `;
 
-// export const DateParagraph = styled.p`
-//   font-size: 18px;
-//   font-weight: 300;
-//   margin-bottom: 12px;
-// `;
-
 export const TitleH2 = styled.h2`
   font-size: 16px;
   font-weight: 400;

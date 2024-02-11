@@ -1,9 +1,3 @@
-// export const formatDate = (dateString) => {
-//   const date = moment(dateString);
-//   const formattedDate = date.format("ddd, D MMMM, HH:mm");
-//   return formattedDate;
-// };
-
 export const convertTemperature = (value, unit) => {
   if (unit === "celsius") {
     return value;

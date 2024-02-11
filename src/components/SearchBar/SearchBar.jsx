@@ -46,9 +46,7 @@ const SearchBar = ({ location }) => {
   const handleAddClick = () => {
     if (selectedCity) {
       const isCityAlreadyAdded = favorites.some(
-        (favorite) =>
-          favorites[0]?.city?.name + ", " + favorites[0].city?.country ===
-          selectedCity?.value
+        (favorite) => favorite.city.id === weatherData.city.id
       );
       if (isCityAlreadyAdded) {
         toast.info("This city is already in favorites");
