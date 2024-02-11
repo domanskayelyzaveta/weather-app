@@ -5,6 +5,7 @@ import sprite from "../../images/sprite.svg";
 import { removeFromFavorites } from "../redux/slice";
 
 import {
+  DateParagraph,
   DegSpan,
   DegSwitcherDiv,
   FavoriteWrapper,
@@ -26,25 +27,41 @@ import {
   WeatherCardWrapper,
   WeatherInfoDiv,
 } from "./WeatherCard.styled";
+import moment from "moment";
 import { useTranslation } from "react-i18next";
 import Chart from "../Chart/Chart";
-import FormattedDate from "../../formatteDate";
 
-const WeatherList = ({ weatherData }) => {
+const WeatherList = () => {
   const { t } = useTranslation();
 
-  const [unit, setUnit] = useState("celsius");
-
-  const dispatch = useDispatch();
-
   const favoriteWeather = useSelector(selectFavorites);
+  const dispatch = useDispatch();
+  const [unit, setUnit] = useState("celsius");
 
   const weatherStatus = favoriteWeather[0].list[0].weather[0].main;
 
   const sunnyWeatherStatus =
     weatherStatus === "Clear" ? t("Sunny") : t(weatherStatus);
 
+  const formatDate = (dateString) => {
+    const date = moment(dateString);
+
+    const shortDay = date.format("ddd");
+    const longMonth = date.format("MMMM");
+
+    return (
+      t("shortDays." + shortDay) +
+      ", " +
+      date.format("D") +
+      " " +
+      t("longMonths." + longMonth) +
+      ", " +
+      date.format("HH:mm")
+    );
+  };
+
   const originalDate = favoriteWeather[0].list[0].dt_txt;
+  const formattedDate = formatDate(originalDate);
 
   const convertTemperature = (value) => {
     if (unit === "celsius") {
@@ -94,11 +111,10 @@ const WeatherList = ({ weatherData }) => {
                 <ParagraphSun>{sunnyWeatherStatus}</ParagraphSun>
               </StyledImgSunDiv>
             </StyledTitleWrapper>
-
-            <FormattedDate dateString={originalDate} />
+            <DateParagraph>{t(formattedDate)}</DateParagraph>
 
             <StyledChartDiv>
-              <Chart data={chartDataArray[index]} />
+              <Chart data={chartDataArray[index]} unit={unit} />
             </StyledChartDiv>
 
             <StyledWeatherInfoDiv>
