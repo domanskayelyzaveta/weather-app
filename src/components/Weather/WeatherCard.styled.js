@@ -144,6 +144,8 @@ export const WrapperSvg = styled.div`
 export const SvgCross = styled.svg`
   width: 8px;
   height: 8px;
+
+  cursor: pointer;
 `;
 
 export const StyledSvgDiv = styled.div`

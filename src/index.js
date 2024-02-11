@@ -6,19 +6,7 @@ import { Provider } from "react-redux";
 import store, { persistor } from "./components/redux/store";
 import { PersistGate } from "redux-persist/integration/react";
 import i18next from "i18next";
-import { I18nextProvider, initReactI18next } from "react-i18next";
-
-i18next.use(initReactI18next).init({
-  supportedLngs: ["en", "ua", "he"],
-  fallbackLng: "en",
-  detection: {
-    order: ["cookie", "localStorage", "htmlTag", "path", "subdomain"],
-    caches: ["localStorage"],
-  },
-  backend: {
-    loadPath: "./../public/assets/languages/{{lng}}/translation.json",
-  },
-});
+import { I18nextProvider } from "react-i18next";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(

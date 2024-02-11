@@ -16,6 +16,7 @@ const customStyles = {
     width: "50px",
     border: "none",
     boxShadow: state.isFocused ? null : "none",
+    cursor: "pointer",
   }),
   indicatorSeparator: () => ({ display: "none" }),
   option: (provided) => ({

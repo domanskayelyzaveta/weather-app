@@ -1,4 +1,5 @@
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const API_KEY = "18431911169fef4afbe92c0ef62b8409";
 
@@ -28,7 +29,7 @@ export const fetchWeatherData = async (inputValue) => {
       label: `${city.name}, ${city.country}`,
     }));
   } catch (error) {
-    console.error("Error fetching data:", error);
+    toast.error("Error fetching data:", error);
     return [];
   }
 };
