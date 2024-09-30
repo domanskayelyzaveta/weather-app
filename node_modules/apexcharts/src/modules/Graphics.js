@@ -392,6 +392,7 @@ class Graphics {
     initialSpeed,
     dataChangeSpeed,
     className,
+    chartType,
     shouldClipToGrid = true,
     bindEventsOnPaths = true,
     drawShadow = true,
@@ -439,9 +440,18 @@ class Graphics {
     el.attr('index', realIndex)
 
     if (shouldClipToGrid) {
-      el.attr({
-        'clip-path': `url(#gridRectMask${w.globals.cuid})`,
-      })
+      if (
+        (chartType === 'bar' && !w.globals.isHorizontal) ||
+        w.globals.comboCharts
+      ) {
+        el.attr({
+          'clip-path': `url(#gridRectBarMask${w.globals.cuid})`,
+        })
+      } else {
+        el.attr({
+          'clip-path': `url(#gridRectMask${w.globals.cuid})`,
+        })
+      }
     }
 
     // const defaultFilter = el.filterer
@@ -450,14 +460,8 @@ class Graphics {
       filters.getDefaultFilter(el, realIndex)
     } else {
       if (w.config.chart.dropShadow.enabled && drawShadow) {
-        if (
-          !w.config.chart.dropShadow.enabledOnSeries ||
-          (w.config.chart.dropShadow.enabledOnSeries &&
-            w.config.chart.dropShadow.enabledOnSeries.indexOf(realIndex) !== -1)
-        ) {
-          const shadow = w.config.chart.dropShadow
-          filters.dropShadow(el, shadow, realIndex)
-        }
+        const shadow = w.config.chart.dropShadow
+        filters.dropShadow(el, shadow, realIndex)
       }
     }
 
@@ -731,59 +735,129 @@ class Graphics {
     return elText
   }
 
+  getMarkerPath(x, y, type, size) {
+    let d = ''
+    switch (type) {
+      case 'cross':
+        size = size / 1.4
+        d = `M ${x - size} ${y - size} L ${x + size} ${y + size}  M ${
+          x - size
+        } ${y + size} L ${x + size} ${y - size}`
+        break
+      case 'plus':
+        size = size / 1.12
+        d = `M ${x - size} ${y} L ${x + size} ${y}  M ${x} ${y - size} L ${x} ${
+          y + size
+        }`
+        break
+      case 'star':
+      case 'sparkle':
+        let points = 5
+        size = size * 1.15
+        if (type === 'sparkle') {
+          size = size / 1.1
+          points = 4
+        }
+        const step = Math.PI / points
+
+        for (let i = 0; i <= 2 * points; i++) {
+          const angle = i * step
+          const radius = i % 2 === 0 ? size : size / 2
+          const xPos = x + radius * Math.sin(angle)
+          const yPos = y - radius * Math.cos(angle)
+
+          d += (i === 0 ? 'M' : 'L') + xPos + ',' + yPos
+        }
+        d += 'Z'
+        break
+      case 'triangle':
+        d = `M ${x} ${y - size} 
+             L ${x + size} ${y + size} 
+             L ${x - size} ${y + size} 
+             Z`
+        break
+      case 'square':
+      case 'rect':
+        size = size / 1.125
+        d = `M ${x - size} ${y - size} 
+           L ${x + size} ${y - size} 
+           L ${x + size} ${y + size} 
+           L ${x - size} ${y + size} 
+           Z`
+        break
+      case 'diamond':
+        size = size * 1.05
+        d = `M ${x} ${y - size} 
+             L ${x + size} ${y} 
+             L ${x} ${y + size} 
+             L ${x - size} ${y} 
+            Z`
+        break
+      case 'line':
+        size = size / 1.1
+        d = `M ${x - size} ${y} 
+           L ${x + size} ${y}`
+        break
+      case 'circle':
+      default:
+        size = size * 2
+        d = `M ${x}, ${y} 
+           m -${size / 2}, 0 
+           a ${size / 2},${size / 2} 0 1,0 ${size},0 
+           a ${size / 2},${size / 2} 0 1,0 -${size},0`
+        break
+    }
+    return d
+  }
+
+  /**
+   * @param {number} x - The x-coordinate of the marker
+   * @param {number} y - The y-coordinate of the marker.
+   * @param {number} size - The size of the marker
+   * @param {Object} opts - The options for the marker.
+   * @returns {Object} The created marker.
+   */
+  drawMarkerShape(x, y, type, size, opts) {
+    const path = this.drawPath({
+      d: this.getMarkerPath(x, y, type, size, opts),
+      stroke: opts.pointStrokeColor,
+      strokeDashArray: opts.pointStrokeDashArray,
+      strokeWidth: opts.pointStrokeWidth,
+      fill: opts.pointFillColor,
+      fillOpacity: opts.pointFillOpacity,
+      strokeOpacity: opts.pointStrokeOpacity,
+    })
+
+    path.attr({
+      cx: x,
+      cy: y,
+      shape: opts.shape,
+      class: opts.class ? opts.class : '',
+    })
+
+    return path
+  }
+
   drawMarker(x, y, opts) {
     x = x || 0
     let size = opts.pSize || 0
 
-    let elPoint = null
-
-    if (opts.shape === 'square' || opts.shape === 'rect') {
-      let radius = opts.pRadius === undefined ? size / 2 : opts.pRadius
-
-      if (y === null || !size) {
-        size = 0
-        radius = 0
-      }
-
-      let nSize = size * 1.2 + radius
-
-      let p = this.drawRect(nSize, nSize, nSize, nSize, radius)
-
-      p.attr({
-        x: x - nSize / 2,
-        y: y - nSize / 2,
-        cx: x,
-        cy: y,
-        class: opts.class ? opts.class : '',
-        fill: opts.pointFillColor,
-        'fill-opacity': opts.pointFillOpacity ? opts.pointFillOpacity : 1,
-        stroke: opts.pointStrokeColor,
-        'stroke-width': opts.pointStrokeWidth ? opts.pointStrokeWidth : 0,
-        'stroke-opacity': opts.pointStrokeOpacity ? opts.pointStrokeOpacity : 1,
-      })
-
-      elPoint = p
-    } else if (opts.shape === 'circle' || !opts.shape) {
-      if (!Utils.isNumber(y)) {
-        size = 0
-        y = 0
-      }
-
-      // let nSize = size - opts.pRadius / 2 < 0 ? 0 : size - opts.pRadius / 2
-
-      elPoint = this.drawCircle(size, {
-        cx: x,
-        cy: y,
-        class: opts.class ? opts.class : '',
-        stroke: opts.pointStrokeColor,
-        fill: opts.pointFillColor,
-        'fill-opacity': opts.pointFillOpacity ? opts.pointFillOpacity : 1,
-        'stroke-width': opts.pointStrokeWidth ? opts.pointStrokeWidth : 0,
-        'stroke-opacity': opts.pointStrokeOpacity ? opts.pointStrokeOpacity : 1,
-      })
+    if (!Utils.isNumber(y)) {
+      size = 0
+      y = 0
     }
 
-    return elPoint
+    return this.drawMarkerShape(x, y, opts?.shape, size, {
+      ...opts,
+      ...(opts.shape === 'line' ||
+      opts.shape === 'plus' ||
+      opts.shape === 'cross'
+        ? {
+            pointStrokeColor: opts.pointFillColor,
+            pointStrokeOpacity: opts.pointFillOpacity,
+          }
+        : {}),
+    })
   }
 
   pathMouseEnter(path, e) {

@@ -71,7 +71,8 @@ const WeatherCard = ({ weatherData }) => {
   const tempValue =
     temp !== null && temp !== undefined ? temp : weatherData.main.temp;
   const temperature = Math.round(convertTemperature(tempValue, unit));
-  const temperatureSign = temperature < 0 ? "-" : "+";
+  const temperatureSign = temperature === 0 ? "" : temperature < 0 ? "-" : "+";
+
   const temperatureAbs = Math.abs(temperature);
 
   const cardBackgroundColor =
@@ -99,7 +100,7 @@ const WeatherCard = ({ weatherData }) => {
       <DateParagraph>{formattedDate}</DateParagraph>
 
       <StyledChartDiv>
-        <Chart data={chartWeather} />
+        <Chart data={chartWeather} unit={unit} />
       </StyledChartDiv>
 
       <StyledWeatherInfoDiv>

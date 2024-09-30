@@ -31,7 +31,7 @@ import moment from "moment";
 import { useTranslation } from "react-i18next";
 import Chart from "../Chart/Chart";
 
-const WeatherList = ({ weatherData }) => {
+const WeatherList = () => {
   const { t } = useTranslation();
 
   const favoriteWeather = useSelector(selectFavorites);
@@ -114,10 +114,7 @@ const WeatherList = ({ weatherData }) => {
             <DateParagraph>{t(formattedDate)}</DateParagraph>
 
             <StyledChartDiv>
-              <Chart
-                data={chartDataArray[index]}
-                // temperature={temperatureData}
-              />
+              <Chart data={chartDataArray[index]} unit={unit} />
             </StyledChartDiv>
 
             <StyledWeatherInfoDiv>
